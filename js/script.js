@@ -1,5 +1,7 @@
 // console.log("connected");
-const loadData = async (status, searchText) => {
+let phonesData = [];
+
+const loadData = async (searchText) => {
   document.getElementById("spinner").style.display = "none";
   document.getElementById("phones-container").classList.remove("hidden");
 
@@ -11,14 +13,18 @@ const loadData = async (status, searchText) => {
   const data = await res.json();
 
   if (data.data.length === 0) {
-    document.getElementById("show-no-data").innerText = "no phone found";
+    document.getElementById("show-no-data").classList.remove("hidden");
+  } else {
+    document.getElementById("show-no-data").classList.add("hidden");
   }
-  displayData(data.data, status);
+
+  phonesData = data.data; // Store phones data globally
+  displayData(false, phonesData);
 };
 
-const displayData = (phones, status) => {
+const displayData = (status, phones) => {
   const phonesContainer = document.getElementById("phones-container");
-  phonesContainer.innerHTML = "";
+  phonesContainer.innerHTML = ""; // Clear previous results
 
   let phoneDisplay;
   if (status) {
@@ -35,19 +41,19 @@ const displayData = (phones, status) => {
      <figure><img src="${image}" alt="Shoes" /></figure>
         <div class="card-body">
             <h2 class="card-title text-center mx-auto">${phone_name}</h2>
-            <p >${slug}</p>
+            <p>${slug}</p>
             <div class="card-actions justify-center">
                 <button onclick="handleShowDetail('${slug}')" class="btn btn-primary">Show Details</button>
             </div>
         </div>
-    
     `;
     phonesContainer.appendChild(div);
   });
 };
-const handleShowDetail = async (snug) => {
+
+const handleShowDetail = async (slug) => {
   const res = await fetch(
-    ` https://openapi.programming-hero.com/api/phone/${snug}`
+    `https://openapi.programming-hero.com/api/phone/${slug}`
   );
   const data = await res.json();
   const { brand, image, releaseDate, name } = data.data;
@@ -64,7 +70,6 @@ const handleShowDetail = async (snug) => {
           }</p>
           <div class="modal-action">
             <form method="dialog">
-              <!-- if there is a button in form, it will close the modal -->
               <button class="btn">Close</button>
             </form>
           </div>
@@ -81,12 +86,13 @@ const handleSearch = () => {
 
   const searchBoxValue = document.getElementById("search-box").value;
   setTimeout(() => {
-    loadData(false, searchBoxValue);
+    loadData(searchBoxValue);
   }, 3000);
 };
+
 const handleShowAll = () => {
-  loadData(true);
-  document.getElementById("phones-container").innerHTML = "";
+  displayData(true, phonesData); // Use the global phonesData to show all phones
 };
 
-loadData(false);
+// Load default data initially
+loadData();

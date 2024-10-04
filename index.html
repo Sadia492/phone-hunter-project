@@ -267,12 +267,16 @@
     <!-- all phone show in this container -->
     <div
       id="phones-container"
-      class="phones-container flex justify-around items-center flex-wrap"
+      class="phones-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 mt-4"
     >
-      <!-- here we showed our spinner -->
-      <div id="spinner"></div>
       <!-- here we make our ophone card  -->
     </div>
+    <div
+      id="show-no-data"
+      class="text-center text-green-500 text-2xl font-bold"
+    ></div>
+    <!-- here we showed our spinner -->
+    <div id="spinner"></div>
 
     <div class="text-center">
       <button onclick="handleShowAll()" class="btn bg-red-500 mt-5">
@@ -284,7 +288,9 @@
 
     <!-- Open the modal using ID.showModal() method -->
 
-    <div id="modal-container"></div>
+    <div id="modal-container">
+      <!-- Open the modal using ID.showModal() method -->
+    </div>
 
     <!-- footer  -->
     <div class="mt-12">
@@ -374,6 +380,6 @@
       </footer>
     </div>
 
-    <script src="./index.js"></script>
+    <script src="js/script.js"></script>
   </body>
 </html>
